@@ -31,5 +31,6 @@ class Employee(models.Model):
             self.hire_date = older_child.hire_date
             self.email = older_child.email
             older_child.delete()
-
-        super().delete(*args, **kwargs)
+            self.save()
+        else:
+            super().delete(*args, **kwargs)
