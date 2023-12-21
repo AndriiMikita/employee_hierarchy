@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    List of employees
+{% endblock title %}
+
+{% block head %}
+    
+{% endblock head %}   
+
+{% block body %}
+    <h2>Employee List</h2>
+    <form method="get">
+        {{ filter.form.as_p }}
+        <button type="submit">Apply Filter</button>
+    </form>
+    <div id="employee-list-container">
+        {% include 'employee_list_partial.html' %}
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            });
+    
+            $("#filter-form").submit(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'employee-list' %}",
+                    data: $("#filter-form").serialize(),
+                    success: function(response) {
+                        $("#employee-list-container").html(response);
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            $("#filter-form").submit(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'employee-list' %}",
+                    success: function(response) {
+                        console.log(response);
+                        $("#employee-list-container").html(response);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock body %}

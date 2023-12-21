@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    {{ employee.full_name }} Details
+{% endblock title %}
+    
+
+{% block body %}
+    <h1>{{ employee.full_name }} Details</h1>
+    <p>Hire date: {{ employee.hire_date }}</p>
+    <p>Position: {{ employee.position }}</p>
+    <p>Email: {{ employee.email }}</p>
+    <p>Head: 
+        {% if employee.head is None %}
+            God
+        {% else %}
+            <a href="{% url 'employee-detail' employee.head.id %}">{{ employee.head.full_name }}</a>
+        {% endif %}
+    </p>
+{% endblock body %}
+    

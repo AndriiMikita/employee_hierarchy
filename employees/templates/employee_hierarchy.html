@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block title %}Employee Hierarchy{% endblock %}
+
+{% block body %}
+    <h1>Employee Hierarchy</h1>
+    <div id="your-chart-container"></div>
+    <script>
+        displayHierarchy({{ hierarchy_data|safe }});
+    
+        function displayHierarchy(data) {
+            const nodeSize = 20;
+            const root = d3.hierarchy(data).eachBefore((i => d => d.index = i++)(0));
+            const nodes = root.descendants();
+            const width = 1000;
+            const height = (nodes.length + 1) * nodeSize;
+    
+            const svg = d3.create("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("viewBox", [-nodeSize / 2, -nodeSize * 3 / 2, width, height])
+                .attr("style", "max-width: 100%; height: auto; font: 18px sans-serif; overflow: visible;");
+    
+            const link = svg.append("g")
+                .attr("fill", "none")
+                .attr("stroke", "#999")
+                .selectAll()
+                .data(root.links())
+                .join("path")
+                .attr("d", d => `
+                    M${d.source.depth * nodeSize},${d.source.index * nodeSize}
+                    V${d.target.index * nodeSize}
+                    h${nodeSize}
+                `);
+    
+            const node = svg.append("g")
+                .selectAll()
+                .data(nodes)
+                .join("g")
+                .attr("transform", d => `translate(0,${d.index * nodeSize})`);
+    
+            const node_link = node.append('a')
+                .attr("href", d => "/employees/" + d.data.data.id + "/")
+    
+            node_link.append("circle")
+                .attr("cx", d => d.depth * nodeSize)
+                .attr("r", 2.5)
+                .attr("fill", d => d.children ? null : "#999");
+    
+            node_link.append("text")
+                .attr("dy", "0.32em")
+                .attr("x", d => d.depth * nodeSize + 6)
+                .text(d => d.data.name)
+    
+            node_link.append("title")
+                .text(d => d.ancestors().reverse().map(d => d.data.name).join("/"));
+    
+            document.getElementById("your-chart-container").appendChild(svg.node());
+        }
+    </script>
+{% endblock %}

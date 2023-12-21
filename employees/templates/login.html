@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Login
+{% endblock title %}
+
+{% block body %}
+    <div class="d-flex justify-content-center flex-column">
+        <div class="d-flex h2 justify-content-center">Log in</div>
+        <div class="primary-container">
+            <form method="post">
+                {% csrf_token %}
+                {% for f in form %}
+                <div class="form-group form-inline">
+                    {{f.label}}
+                    <br>
+                    {{f}}
+                    {% if f.errors %}
+                        <div class="form-errors alert alert-danger">{{f.errors}}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button class="btn btn-info" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+{% endblock body %}
