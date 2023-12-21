@@ -1,12 +1,18 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h2>Confirm Deletion</h2>
-  <p>Are you sure you want to delete this employee?</p>
-  <form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Yes, delete</button>
-  </form>
-  <a href="{% url 'employee-list' %}">Cancel</a>
+<div class="container d-flex flex-column justify-content-center align-items-center">
+    <h2>Confirm Deletion</h2>
+    <p>Are you sure you want to delete this employee?</p>
+
+    <form method="post" action="" class="needs-validation" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p style="text-align: center;"><a href="{% url 'employee-detail' employee.id %}">{{ employee.full_name }}</a></p>
+        <div class="form-group">
+            <a type="submit" class="btn btn-danger">Yes, delete</a>
+            <a href="{% url 'employee-detail' employee.id %}" class="btn btn-secondary ml-2">Cancel</a>
+        </div>
+    </form>
+</div>
 {% endblock body %}

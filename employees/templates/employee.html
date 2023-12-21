@@ -20,10 +20,12 @@
                 <a href="{% url 'employee-detail' employee.head.id %}">{{ employee.head.full_name }}</a>
             {% endif %}
         </p>
+        {% if authenticated %}
         <div class='d-flex justify-content-start'>
-            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-sm btn-outline-info me-3">Edit</a>
-            <a href="{% url 'employee-delete' employee.id %}" class="btn btn-sm btn-outline-info ">Delete</a>
+            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-outline-info me-3">Edit</a>
+            <a href="{% url 'employee-delete' employee.id %}" class="btn btn-outline-info ">Delete</a>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock body %}
