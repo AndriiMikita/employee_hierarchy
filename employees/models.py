@@ -25,13 +25,11 @@ class Employee(models.Model):
 
     def delete(self, *args, **kwargs):
         childs = Employee.objects.filter(head = self)
-        older_child = childs.order_by('hire_date').first()
-        older_child.head = self.head
-        new_parent = older_child 
-
-        for child in childs:
-            if child != new_parent:
-                child.head = new_parent
-                child.save()
+        if childs.exists():
+            older_child = childs.order_by('hire_date').first()
+            self.full_name = older_child.full_name
+            self.hire_date = older_child.hire_date
+            self.email = older_child.email
+            older_child.delete()
 
         super().delete(*args, **kwargs)
