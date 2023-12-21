@@ -9,6 +9,7 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView, D
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from urllib.parse import urlencode
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class EmployeeHierarchyView(View):
     template_name = 'employee_hierarchy.html'
@@ -91,35 +92,35 @@ def logout_user(request):
     logout(request)
     return redirect('employee-list')
 
-class EmployeeCreateView(CreateView):
+class EmployeeCreateView(LoginRequiredMixin, CreateView):
     model = Employee
     template_name = 'employee_form.html'
     fields = ['full_name', 'position', 'hire_date', 'email', 'head']
     success_url = reverse_lazy('employee-list')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['authenticated'] = self.request.user.is_authenticated
         context['user'] = self.request.user
         return context
-    
-class EmployeeUpdateView(UpdateView):
+
+class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
     model = Employee
     template_name = 'employee_form.html'
     fields = ['full_name', 'position', 'hire_date', 'email', 'head']
     success_url = reverse_lazy('employee-list')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['authenticated'] = self.request.user.is_authenticated
         context['user'] = self.request.user
         return context
-    
-class EmployeeDeleteView(DeleteView):
+
+class EmployeeDeleteView(LoginRequiredMixin, DeleteView):
     model = Employee
     template_name = 'employee_delete.html'
     success_url = reverse_lazy('employee-list')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['authenticated'] = self.request.user.is_authenticated
