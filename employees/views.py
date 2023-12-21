@@ -74,6 +74,11 @@ class RegisterUser(CreateView, DataMixin):
         user = form.save()
         login(self.request, user)
         return redirect('employee-list')
+    
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('employee-list')
+        return super().dispatch(request, *args, **kwargs)
         
 class LoginUser(LoginView, DataMixin):
     form_class = LoginUserForm
@@ -87,6 +92,11 @@ class LoginUser(LoginView, DataMixin):
     
     def get_success_url(self):
         return reverse_lazy('employee-list')
+    
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('employee-list')
+        return super().dispatch(request, *args, **kwargs)
     
 def logout_user(request):
     logout(request)
