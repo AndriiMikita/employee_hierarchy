@@ -7,16 +7,22 @@
     
 
 {% block body %}
-    <h1>{{ employee.full_name }} Details</h1>
-    <p>Hire date: {{ employee.hire_date }}</p>
-    <p>Position: {{ employee.position }}</p>
-    <p>Email: {{ employee.email }}</p>
-    <p>Head: 
-        {% if employee.head is None %}
-            God
-        {% else %}
-            <a href="{% url 'employee-detail' employee.head.id %}">{{ employee.head.full_name }}</a>
-        {% endif %}
-    </p>
+<div class="employee-details-container container d-flex flex-column justify-content-center">
+        <h1>{{ employee.full_name }} Details</h1>
+        <p>Hire date: {{ employee.hire_date }}</p>
+        <p>Position: {{ employee.position }}</p>
+        <p>Email: {{ employee.email }}</p>
+        <p>Head: 
+            {% if employee.head is None %}
+                God
+            {% else %}
+                <a href="{% url 'employee-detail' employee.head.id %}">{{ employee.head.full_name }}</a>
+            {% endif %}
+        </p>
+        <div class='container d-flex'>
+            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-sm btn-outline-info ">Edit</a>
+            <a href="{% url 'employee-delete' employee.id %}" class="btn btn-sm btn-outline-info ">Delete</a>
+        </div>
+    </div>
 {% endblock body %}
     

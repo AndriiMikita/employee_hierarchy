@@ -17,12 +17,26 @@ class EmployeeHierarchyView(View):
         hierarchy_data = build_hierarchy_data()
         context = {'hierarchy_data': hierarchy_data,
                    'employees' : Employee.objects.all()}
+        
         return render(request, self.template_name, context)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['authenticated'] = self.request.user.is_authenticated
+        context['user'] = self.request.user
+        return context
+    
 
 class EmployeeDetailView(DetailView):
     model = Employee
     template_name = 'employee.html'
     context_object_name = 'employee'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['authenticated'] = self.request.user.is_authenticated
+        context['user'] = self.request.user
+        return context
     
 class EmployeeListView(ListView):
     model = Employee
@@ -40,6 +54,8 @@ class EmployeeListView(ListView):
         filter_params = urlencode(self.request.GET)
         context['filter_params'] = filter_params
         context['filter'] = EmployeeFilter(self.request.GET, queryset=self.get_queryset())
+        context['authenticated'] = self.request.user.is_authenticated
+        context['user'] = self.request.user
         return context
     
 class RegisterUser(CreateView, DataMixin):
@@ -72,7 +88,7 @@ class LoginUser(LoginView, DataMixin):
     
 def logout_user(request):
     logout(request)
-    return redirect('employee-hierarchy')
+    return redirect('employee-list')
 
 class EmployeeCreateView(CreateView):
     model = Employee
@@ -80,13 +96,31 @@ class EmployeeCreateView(CreateView):
     fields = ['full_name', 'position', 'hire_date', 'email', 'head']
     success_url = reverse_lazy('employee-list')
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['authenticated'] = self.request.user.is_authenticated
+        context['user'] = self.request.user
+        return context
+    
 class EmployeeUpdateView(UpdateView):
     model = Employee
     template_name = 'employee_form.html'
     fields = ['full_name', 'position', 'hire_date', 'email', 'head']
     success_url = reverse_lazy('employee-list')
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['authenticated'] = self.request.user.is_authenticated
+        context['user'] = self.request.user
+        return context
+    
 class EmployeeDeleteView(DeleteView):
     model = Employee
     template_name = 'employee_delete.html'
     success_url = reverse_lazy('employee-list')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['authenticated'] = self.request.user.is_authenticated
+        context['user'] = self.request.user
+        return context
