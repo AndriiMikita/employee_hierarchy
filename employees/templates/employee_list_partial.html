@@ -1,15 +1,21 @@
-<ul>
-    {% for employee in employees %}
-    <div>
-        <h3><a href="{% url 'employee-detail' employee.id %}">{{ employee.full_name }}</a></h3>
-        <ul>
-            <li>Position: {{employee.position}}</li>
-            <li>Hire date: {{employee.hire_date}}</li>
-            <li>Email: {{employee.email}}</li>
-            {% if not employee.head.full_name is None %}
-            <li> Head: <a href='{% url "employee-detail" employee.head.id %}'>{{employee.head.full_name}}<a></li>
-            {% endif %}
-        </ul>
+<div id="employee-list-container" class="container">
+    <div class="row justify-content-center">
+        {% for employee in employees %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3><a href="{% url 'employee-detail' employee.id %}">{{ employee.full_name }}</a></h3>
+                    <ul class="list-unstyled">
+                        <li>Position: {{employee.position}}</li>
+                        <li>Hire date: {{employee.hire_date}}</li>
+                        <li>Email: {{employee.email}}</li>
+                        {% if not employee.head.full_name is None %}
+                        <li>Head: <a href='{% url "employee-detail" employee.head.id %}'>{{employee.head.full_name}}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</ul>
+</div>

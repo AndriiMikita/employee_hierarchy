@@ -9,15 +9,39 @@
 {% endblock head %}   
 
 {% block body %}
+<div class="d-flex flex-column justify-content-center align-items-center">
     <h2>Employee List</h2>
-    <form method="get">
-        {{ filter.form.as_p }}
-        <button type="submit">Apply Filter</button>
+
+    <form method="get" class="form-inline">
+        <div class="form-group mb-2">
+            {{ filter.form.full_name }}
+        </div>
+    
+        <div class="form-group mx-sm-3 mb-2">
+            {{ filter.form.position }}
+        </div>
+    
+        <div class="form-group mx-sm-3 mb-2">
+            {{ filter.form.email }}
+        </div>
+    
+        <div class="form-group mx-sm-3 mb-2">
+            {{ filter.form.hire_date }}
+        </div>
+    
+        <div class="form-group mx-sm-3 mb-2">
+            {{ filter.form.order_by }}
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Apply Filter</button>
     </form>
+</div>
+
+    
     <div id="employee-list-container">
         {% include 'employee_list_partial.html' %}
     </div>
 
+    <div class="container text-center">
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
@@ -35,4 +59,6 @@
             {% endif %}
         </span>
     </div>
+</div>
+
 {% endblock body %}

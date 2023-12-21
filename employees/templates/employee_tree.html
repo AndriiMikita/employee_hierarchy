@@ -1,9 +1,0 @@
-<ul>
-    <li>{{ node.node.full_name }} - {{ node.node.position }}
-      {% if node.children %}
-        {% for child in node.children %}
-          {% include 'employee_tree.html' with node=child %}
-        {% endfor %}
-      {% endif %}
-    </li>
-  </ul>

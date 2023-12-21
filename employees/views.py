@@ -42,7 +42,7 @@ class EmployeeListView(ListView):
     model = Employee
     context_object_name = 'employees'
     template_name = 'employee_list.html'
-    paginate_by = 10
+    paginate_by = 12
 
     def get_queryset(self):
         queryset = Employee.objects.all()
@@ -51,7 +51,8 @@ class EmployeeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        filter_params = urlencode(self.request.GET)
+        params_dict = {key: value for key, value in self.request.GET.items() if key != 'page'}
+        filter_params = urlencode(params_dict)
         context['filter_params'] = filter_params
         context['filter'] = EmployeeFilter(self.request.GET, queryset=self.get_queryset())
         context['authenticated'] = self.request.user.is_authenticated

@@ -7,7 +7,8 @@
     
 
 {% block body %}
-<div class="employee-details-container container d-flex flex-column justify-content-center">
+<div class="container">
+    <div class="employee-details-container d-flex flex-column align-items-center justify-content-start">
         <h1>{{ employee.full_name }} Details</h1>
         <p>Hire date: {{ employee.hire_date }}</p>
         <p>Position: {{ employee.position }}</p>
@@ -19,10 +20,11 @@
                 <a href="{% url 'employee-detail' employee.head.id %}">{{ employee.head.full_name }}</a>
             {% endif %}
         </p>
-        <div class='container d-flex'>
-            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-sm btn-outline-info ">Edit</a>
+        <div class='d-flex justify-content-start'>
+            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-sm btn-outline-info me-3">Edit</a>
             <a href="{% url 'employee-delete' employee.id %}" class="btn btn-sm btn-outline-info ">Delete</a>
         </div>
     </div>
+</div>
 {% endblock body %}
     
