@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -7,9 +6,9 @@ from .models import Employee
 from .filters import EmployeeFilter
 from .utils import build_hierarchy_data, DataMixin
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from django.template.loader import render_to_string
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
+from urllib.parse import urlencode
 
 class EmployeeHierarchyView(View):
     template_name = 'employee_hierarchy.html'
@@ -29,7 +28,7 @@ class EmployeeListView(ListView):
     model = Employee
     context_object_name = 'employees'
     template_name = 'employee_list.html'
-    paginate_by = 10  # Якщо вам потрібна пагінація
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = Employee.objects.all()
@@ -38,6 +37,8 @@ class EmployeeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        filter_params = urlencode(self.request.GET)
+        context['filter_params'] = filter_params
         context['filter'] = EmployeeFilter(self.request.GET, queryset=self.get_queryset())
         return context
     
